@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="World" load_steps=2 format=3 uid="uid://bgta1t6p8sws2"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/World.cs" id="1_ed1n6"]
+
+[resource]
+script = ExtResource("1_ed1n6")
+Width = 6
+Height = 6
+Size = 0.577
+OriginQ = 3
+OriginR = 3
