@@ -18,32 +18,9 @@ public partial class Board : Node
 
     [Export]
     public World World;
-
-    private string[] _names = new[]
-    {
-        "building-farm.glb",
-        "building-house.glb",
-        "building-village.glb"
-    };
+    
     public Board()
     {
-
-        foreach (var name in _names)
-        {
-            var scene = 
-                GD.Load<PackedScene>("res://Assets/Tiles/" + name);
-            if (scene != null)
-            {
-                _tile_scenes.Add(scene);
-                Debug.Print("Loaded {0}", name);
-            }
-            else
-            {
-                Debug.Print("Failed to load {0}", name);
-            }
-        }
-        
-
     }
     
     public override void _Ready()
@@ -53,31 +30,25 @@ public partial class Board : Node
         
         Debug.Assert(World != null);
         
-        var scene = _tile_scenes[(int)(GD.Randi() % _tile_scenes.Count)];
+        var random = new Random();
+        var newType = random.NextEnum<Tile.Type>();
         var current_hex = new Hex(3, 3);
         var pos = _layout.HexToPixel(current_hex);
+
+        Tile t = new Tile(newType);
         
-        Node3D instance = scene.Instantiate() as Node3D;
-        Tile t = new Tile
-        {
-            Node = instance
-        };
         World.SetTile(t, current_hex);
-        instance.Position = pos.ToVector3();
-        AddChild(instance);
+        t.Node.Position = pos.ToVector3();
+        AddChild(t.Node);
         for (int i = 0; i < 6; ++i)
         {
-            scene = _tile_scenes[(int)(GD.Randi() % _tile_scenes.Count)];
+            newType = random.NextEnum<Tile.Type>();
+            t = new Tile(newType);
             var hex = current_hex.Add(Hex.directions[i]);
             pos = _layout.HexToPixel(hex);
-            instance = scene.Instantiate() as Node3D;
-            instance.Position = pos.ToVector3();
-            t = new Tile
-            {
-                Node = instance
-            };
+            t.Node.Position = pos.ToVector3();
             World.SetTile(t, hex);
-            AddChild(instance);
+            AddChild(t.Node);
         }
     }
 }
