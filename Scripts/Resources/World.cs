@@ -6,14 +6,15 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class World : Resource
 {
-    World()
+    World() : this(6, 6, 1.0f / Math.Sqrt(3.0f), 3, 3) {}
+    World(int width, int height, double size, int originq, int originr)
     {
-        Width = 6;
-        Height = 6;
-        tiles = new List<Tile>(Width * Height);
-        Size = 1.0f / Math.Sqrt(3.0f);
-        OriginQ = 3;
-        OriginR = 3;
+        Width = width;
+        Height = height;
+        Size = size;
+        OriginQ = originq;
+        OriginR = originr;
+        _tiles = new List<Tile>(new Tile[width*height]);
     }
 
     [Export] public int Width { get; private set; }
@@ -29,8 +30,8 @@ public partial class World : Resource
     [Export]
     public int OriginR { get; set; }
     
-    private List<Tile> tiles;
-
+    private List<Tile> _tiles;
+    
     public Layout Layout
     {
         get
@@ -44,15 +45,13 @@ public partial class World : Resource
         }
     }
     
-    
-
     public void SetTile(Tile tile, Hex location)
     {
-        
+        _tiles[location.r * Height + location.q] = tile;
     }
     
     public Tile  GetTile(Hex location)
     {
-        return null;
+        return _tiles[location.r * Height + location.q];
     }
 }
