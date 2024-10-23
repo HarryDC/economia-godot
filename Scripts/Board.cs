@@ -27,28 +27,20 @@ public partial class Board : Node
     {
         base._Ready();
         _layout = World.Layout;
+        World.RootNode = this;
         
         Debug.Assert(World != null);
         
         var random = new Random();
-        var newType = random.NextEnum<Tile.Type>();
-        var current_hex = new Hex(3, 3);
-        var pos = _layout.HexToPixel(current_hex);
+        var center_hex = new Hex(3, 3);
 
-        Tile t = new Tile(newType);
-        
-        World.SetTile(t, current_hex);
-        t.Node.Position = pos.ToVector3();
-        AddChild(t.Node);
+        Tile t = new Tile(random.NextEnum<Tile.Type>());
+        World.SetTile(t, center_hex);
+
         for (int i = 0; i < 6; ++i)
         {
-            newType = random.NextEnum<Tile.Type>();
-            t = new Tile(newType);
-            var hex = current_hex.Add(Hex.directions[i]);
-            pos = _layout.HexToPixel(hex);
-            t.Node.Position = pos.ToVector3();
-            World.SetTile(t, hex);
-            AddChild(t.Node);
+            t = new Tile(random.NextEnum<Tile.Type>());
+            World.SetTile(t, center_hex.Add(Hex.directions[i]));
         }
     }
 }

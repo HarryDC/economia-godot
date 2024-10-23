@@ -27,7 +27,7 @@ public class Tile
     
     public Node3D Node;
 
-    static Node3D GetTileNode(Type type)
+    public static Node3D GetTileNode(Type type)
     {
         Debug.Assert(_names.ContainsKey(type));
         var scene = 

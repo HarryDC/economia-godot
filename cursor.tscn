@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://Scripts/Cursor.cs" id="1_fepkn"]
 [ext_resource type="Resource" uid="uid://bgta1t6p8sws2" path="res://Resources/world.tres" id="2_e4pr4"]
 
-[node name="Cursor" type="Node3D" node_paths=PackedStringArray("Selection", "Tile")]
+[node name="Cursor" type="Node3D" node_paths=PackedStringArray("Selection", "CurrentTile")]
 script = ExtResource("1_fepkn")
 World = ExtResource("2_e4pr4")
 Selection = NodePath("Selection")
-Tile = NodePath("Tile")
+CurrentTile = NodePath("CurrentTile")
 
-[node name="Tile" type="Node3D" parent="."]
+[node name="CurrentTile" type="Node3D" parent="."]
 
 [node name="Selection" type="MeshInstance3D" parent="."]

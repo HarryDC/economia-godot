@@ -6,14 +6,20 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class World : Resource
 {
-    World()
+    World() : this(6, 6, 1.0f / Math.Sqrt(3.0f), 3, 3) {}
+    World(int width, int height, double size, int originq, int originr)
     {
-        Width = 6;
-        Height = 6;
-        tiles = new List<Tile>(Width * Height);
-        Size = 1.0f / Math.Sqrt(3.0f);
-        OriginQ = 3;
-        OriginR = 3;
+        Width = width;
+        Height = height;
+        Size = size;
+        OriginQ = originq;
+        OriginR = originr;
+        _tiles = new List<Tile>(new Tile[width*height]);
+        _layout = new Layout(Layout.pointy, new Point(Size, Size),
+            new Point(0,0));
+        // Offset board so the center of the screen is at 3/3
+        var corner = _layout.HexToPixel(new Hex(-OriginQ, -OriginR));
+        _layout = new Layout(Layout.pointy, new Point(Size, Size), corner);
     }
 
     [Export] public int Width { get; private set; }
@@ -29,30 +35,23 @@ public partial class World : Resource
     [Export]
     public int OriginR { get; set; }
     
-    private List<Tile> tiles;
+    public Node RootNode { get; set; }
+    
+    private List<Tile> _tiles;
 
-    public Layout Layout
-    {
-        get
-        {
-            var layout = new Layout(Layout.pointy, new Point(Size, Size),
-                new Point(0,0));
-            // Offset board so the center of the screen is at 3/3
-            var corner = layout.HexToPixel(new Hex(-OriginQ, -OriginR));
-            layout = new Layout(Layout.pointy, new Point(Size, Size), corner);
-            return layout;
-        }
-    }
-    
-    
+    private Layout _layout;
+    public Layout Layout => _layout;
 
     public void SetTile(Tile tile, Hex location)
     {
-        
+        _tiles[location.r * Height + location.q] = tile;
+        var pos = _layout.HexToPixel(location);
+        tile.Node.Position = pos.ToVector3();
+        RootNode.AddChild(tile.Node);
     }
     
     public Tile  GetTile(Hex location)
     {
-        return null;
+        return _tiles[location.r * Height + location.q];
     }
 }
