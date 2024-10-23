@@ -50,17 +50,23 @@ public partial class Cursor : Node3D
             newType = (newType + 1) % Enum.GetValues<Tile.Type>().Length;
         }
 
-        if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePrevios))
+        if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePrevious))
         {
             int count = Enum.GetValues<Tile.Type>().Length; 
             newType = (newType - 1 + count) % count;
         }
 
+        // Update Current position before place action
         current_q = (current_q + World.Height) % World.Height;
         current_r = (current_r + World.Width) % World.Width;
-        
         _current_hex = new Hex(current_q, current_r);
 
+        if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePlace))
+        {
+            Tile t = new Tile(_type);
+            World.SetTile(t, _current_hex);
+        }
+        
         if (newType != (int)_type)
         {
             _type = (Tile.Type)newType;
