@@ -1,0 +1,10 @@
+{
+	"Farm" : {
+		"Production" : { "Wheat" : 1},
+		"MaxStorage" : {"Wheat" : 100}
+	},
+	"Forest" : {
+		"Production" : { "Wood" : 1},
+		"MaxStorage" : { "Wood" : 100}
+	}
+}
