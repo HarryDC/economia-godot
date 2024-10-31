@@ -9,11 +9,17 @@ public partial class Cursor : Node3D
     [Export] public World World;
     [Export] public MeshInstance3D Selection;
     [Export] public Node3D CurrentTile;
+    
+
 
     private Hex _current_hex;
     private Layout _layout;
     private Tile.Type _type;
     private Dictionary<Tile.Type, Node3D> _nodes = new();
+    
+    [Signal]
+    public delegate void SelectionChangedEventHandler(int newQ, int newR);
+    
     public override void _Ready()
     {
         base._Ready();
@@ -59,7 +65,11 @@ public partial class Cursor : Node3D
         // Update Current position before place action
         current_q = (current_q + World.Height) % World.Height;
         current_r = (current_r + World.Width) % World.Width;
-        _current_hex = new Hex(current_q, current_r);
+        if (_current_hex.q != current_q || _current_hex.r != current_r)
+        {
+            _current_hex = new Hex(current_q, current_r);
+            EmitSignal(SignalName.SelectionChanged, current_q, current_r);
+        } 
 
         if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePlace))
         {
