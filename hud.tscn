@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhw54xinvfhi2"]
+
+[ext_resource type="Script" path="res://Scripts/Hud.cs" id="1_l0ytn"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 433.0
+offset_bottom = 146.0
+script = ExtResource("1_l0ytn")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 2
+
+[node name="Title" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Farm:"
+
+[node name="Data" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Data"
