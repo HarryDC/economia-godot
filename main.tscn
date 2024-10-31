@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnqlet3p6gmam"]
+[gd_scene load_steps=6 format=3 uid="uid://dnqlet3p6gmam"]
 
 [ext_resource type="Script" path="res://Scripts/Board.cs" id="1_etjc3"]
 [ext_resource type="Resource" uid="uid://bgta1t6p8sws2" path="res://Resources/world.tres" id="2_1thgc"]
 [ext_resource type="PackedScene" uid="uid://taqfe4p6dcx8" path="res://cursor.tscn" id="3_n455a"]
 [ext_resource type="Script" path="res://Scripts/Simulation.cs" id="3_q60sw"]
+[ext_resource type="PackedScene" uid="uid://dhw54xinvfhi2" path="res://hud.tscn" id="5_gawmu"]
 
 [node name="Main" type="Node3D"]
 
@@ -25,3 +26,9 @@ World = ExtResource("2_1thgc")
 [node name="Simulation" type="Node" parent="."]
 script = ExtResource("3_q60sw")
 World = ExtResource("2_1thgc")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Hud" parent="CanvasLayer" instance=ExtResource("5_gawmu")]
+
+[connection signal="SelectionChanged" from="Cursor" to="CanvasLayer/Hud" method="OnSelectionChanged"]

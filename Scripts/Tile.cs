@@ -33,7 +33,8 @@ public class Tile
     {
         Farm,
         House,
-        Village
+        Village,
+        Forest,
     }
     
     // Storage = storage + output * dt - required*dt (if storage > required for all)
@@ -43,7 +44,8 @@ public class Tile
     {
         { Type.Farm, "building-farm.glb" },
         { Type.House, "building-house.glb" },
-        { Type.Village, "building-village.glb" }
+        { Type.Village, "building-village.glb" },
+        { Type.Forest, "grass-forest.glb" },
     };
     
     public Node3D Node;
@@ -52,7 +54,7 @@ public class Tile
     {
         Debug.Assert(Names.ContainsKey(type));
         var scene = 
-            GD.Load<PackedScene>("res://Assets/Tiles/" + Names[type]);
+            GD.Load<PackedScene>($"res://Assets/Tiles/{Names[type]}");
         Debug.Assert(scene != null, $"Could not find {Names[type]} in Assets/Tiles");
         return scene.Instantiate() as Node3D;
     }
