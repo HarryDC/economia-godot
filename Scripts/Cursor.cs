@@ -14,8 +14,8 @@ public partial class Cursor : Node3D
 
     private Hex _current_hex;
     private Layout _layout;
-    private Tile.Type _type;
-    private Dictionary<Tile.Type, Node3D> _nodes = new();
+    private Tile.Kind _kind;
+    private Dictionary<Tile.Kind, Node3D> _nodes = new();
     
     [Signal]
     public delegate void SelectionChangedEventHandler(int newQ, int newR);
@@ -25,26 +25,26 @@ public partial class Cursor : Node3D
         base._Ready();
         _layout = World.Layout;
         _current_hex = new Hex(World.OriginQ, World.OriginR);
-        _type = Tile.Type.Farm;
+        _kind = Tile.Kind.Farm;
         var mesh = new BoxMesh();
         mesh.Size = new Vector3(1, 1, 1);
         Selection.Mesh = mesh;
         
-        foreach(var type in Enum.GetValues<Tile.Type>())
+        foreach(var type in Enum.GetValues<Tile.Kind>())
         {
             _nodes[type] = Tile.GetTileNode(type);
             _nodes[type].Visible = false;
             CurrentTile.AddChild(_nodes[type]);
         }
 
-        _nodes[_type].Visible = true;
+        _nodes[_kind].Visible = true;
     }
     
     public override void _Input(InputEvent inputEvent)
     {
         int current_r = _current_hex.r;
         int current_q = _current_hex.q;
-        int newType = (int)_type;
+        int newType = (int)_kind;
         
         base._Input(inputEvent);
         if (inputEvent.IsActionPressed(ActionNames.ActionCursorDown)) current_r += 1;
@@ -53,12 +53,12 @@ public partial class Cursor : Node3D
         if (inputEvent.IsActionPressed(ActionNames.ActionCursorRight)) current_q += 1;
         if (inputEvent.IsActionPressed(ActionNames.ActionNewTileNext))
         {
-            newType = (newType + 1) % Enum.GetValues<Tile.Type>().Length;
+            newType = (newType + 1) % Enum.GetValues<Tile.Kind>().Length;
         }
 
         if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePrevious))
         {
-            int count = Enum.GetValues<Tile.Type>().Length; 
+            int count = Enum.GetValues<Tile.Kind>().Length; 
             newType = (newType - 1 + count) % count;
         }
 
@@ -73,16 +73,16 @@ public partial class Cursor : Node3D
 
         if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePlace))
         {
-            Tile t = new Tile(_type);
+            Tile t = new Tile(_kind);
             World.SetTile(t, _current_hex);
         }
         
-        if (newType != (int)_type)
+        if (newType != (int)_kind)
         {
-            _type = (Tile.Type)newType;
+            _kind = (Tile.Kind)newType;
             foreach (var (type, node) in _nodes)
             {
-                node.Visible = (type == _type);
+                node.Visible = (type == _kind);
             }
         }
 

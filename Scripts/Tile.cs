@@ -16,20 +16,20 @@ internal enum CollectionType
     Production
 }
 
-internal class GoodCollection : Dictionary<Good, double> {}
+public class GoodCollection : Dictionary<Good, double> {}
 
 
 public class Tile
 {
     // Actual Values
-    private GoodCollection _storage = new();
+    public GoodCollection Storage = new();
     
     // Required Values
-    private GoodCollection _maxStorage = new();
-    private GoodCollection _required = new(); 
-    private GoodCollection _output = new();
+    public GoodCollection MaxStorage = new();
+    public GoodCollection Required = new(); 
+    public GoodCollection Output = new();
     
-    public enum Type
+    public enum Kind
     {
         Farm,
         House,
@@ -40,51 +40,53 @@ public class Tile
     // Storage = storage + output * dt - required*dt (if storage > required for all)
     // maxStorage, required and output could depend on modifiers 
     
-    private static readonly Dictionary<Type, string> Names = new()
+    private static readonly Dictionary<Kind, string> Names = new()
     {
-        { Type.Farm, "building-farm.glb" },
-        { Type.House, "building-house.glb" },
-        { Type.Village, "building-village.glb" },
-        { Type.Forest, "grass-forest.glb" },
+        { Kind.Farm, "building-farm.glb" },
+        { Kind.House, "building-house.glb" },
+        { Kind.Village, "building-village.glb" },
+        { Kind.Forest, "grass-forest.glb" },
     };
     
     public Node3D Node;
+    public Kind Type;
     
-    public static Node3D GetTileNode(Type type)
+    public static Node3D GetTileNode(Kind kind)
     {
-        Debug.Assert(Names.ContainsKey(type));
+        Debug.Assert(Names.ContainsKey(kind));
         var scene = 
-            GD.Load<PackedScene>($"res://Assets/Tiles/{Names[type]}");
-        Debug.Assert(scene != null, $"Could not find {Names[type]} in Assets/Tiles");
+            GD.Load<PackedScene>($"res://Assets/Tiles/{Names[kind]}");
+        Debug.Assert(scene != null, $"Could not find {Names[kind]} in Assets/Tiles");
         return scene.Instantiate() as Node3D;
     }
     
-    public Tile(Type type)
+    public Tile(Kind kind)
     {
-        Node = GetTileNode(type);
+        Node = GetTileNode(kind);
+        Type = kind;
         var json = GD.Load<Json>("res://Assets/simulation_data.json");
     
-        InitCollection(_storage);
-        InitCollection(_maxStorage);
-        InitCollection(_required);
-        InitCollection(_output);
+        InitCollection(Storage);
+        InitCollection(MaxStorage);
+        InitCollection(Required);
+        InitCollection(Output);
 
         var collections = new Dictionary<CollectionType, GoodCollection>()
         {
-            { CollectionType.Required, _required },
-            { CollectionType.Production, _output },
-            { CollectionType.MaxStorage, _maxStorage }
+            { CollectionType.Required, Required },
+            { CollectionType.Production, Output },
+            { CollectionType.MaxStorage, MaxStorage }
         };
         
         // Check for 
-        if (!json.Data.AsGodotDictionary().ContainsKey(type.ToString()))
+        if (!json.Data.AsGodotDictionary().ContainsKey(kind.ToString()))
         {
-            GD.PrintErr($"Could not find JSON data for {type}");
+            GD.PrintErr($"Could not find JSON data for {kind}");
             return;
         }
         
         // Init current values from JSON 
-        var tileData = json.Data.AsGodotDictionary()[type.ToString()].AsGodotDictionary();
+        var tileData = json.Data.AsGodotDictionary()[kind.ToString()].AsGodotDictionary();
 
         foreach (var collectionType in Enum.GetValues<CollectionType>())
         {
@@ -99,7 +101,7 @@ public class Tile
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr($"For {type} in {collectionType} could not parse {goodName}: {value}");
+                    GD.PrintErr($"For {kind} in {collectionType} could not parse {goodName}: {value}");
                     GD.PrintErr(e);
                 }
             }
@@ -117,9 +119,9 @@ public class Tile
     public void Process(float dt)
     {
         var canProduce = true;
-        foreach (var (key, value) in _required)
+        foreach (var (key, value) in Required)
         {
-            if (_storage[key] < value)
+            if (Storage[key] < value)
             {
                 canProduce = false;
                 break;
@@ -128,14 +130,14 @@ public class Tile
         
         if (!canProduce) return;
 
-        foreach (var (key, value) in _required)
+        foreach (var (key, value) in Required)
         {
-            _storage[key] -= value;
+            Storage[key] -= value;
         }
 
-        foreach (var (key, value) in _output)
+        foreach (var (key, value) in Output)
         {
-            _storage[key] += value;
+            Storage[key] += value;
         }
     }
 }

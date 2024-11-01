@@ -34,12 +34,12 @@ public partial class Board : Node
         var random = new Random();
         var center_hex = new Hex(3, 3);
 
-        Tile t = new Tile(random.NextEnum<Tile.Type>());
+        Tile t = new Tile(random.NextEnum<Tile.Kind>());
         World.SetTile(t, center_hex);
 
         for (int i = 0; i < 6; ++i)
         {
-            t = new Tile(random.NextEnum<Tile.Type>());
+            t = new Tile(random.NextEnum<Tile.Kind>());
             World.SetTile(t, center_hex.Add(Hex.directions[i]));
         }
     }
