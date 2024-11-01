@@ -73,8 +73,7 @@ public partial class Cursor : Node3D
 
         if (inputEvent.IsActionPressed(ActionNames.ActionNewTilePlace))
         {
-            Tile t = new Tile(_kind);
-            World.SetTile(t, _current_hex);
+            World.AddTile(_kind, _current_hex);
         }
         
         if (newType != (int)_kind)

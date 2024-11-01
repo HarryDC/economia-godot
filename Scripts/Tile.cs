@@ -19,7 +19,7 @@ internal enum CollectionType
 public class GoodCollection : Dictionary<Good, double> {}
 
 
-public class Tile
+public partial class Tile : Node
 {
     // Actual Values
     public GoodCollection Storage = new();
@@ -50,6 +50,8 @@ public class Tile
     
     public Node3D Node;
     public Kind Type;
+    private double _elapsed = 0.0;
+    private double _tick = 1.0;
     
     public static Node3D GetTileNode(Kind kind)
     {
@@ -115,9 +117,15 @@ public class Tile
             goodCollection[good] = 0;
         }
     }
-    
-    public void Process(float dt)
+
+    public override void _Process(double delta)
     {
+        base._Process(delta);
+        _elapsed += delta;
+        
+        if (_elapsed < _tick) return;
+        _elapsed -= _tick;
+        
         var canProduce = true;
         foreach (var (key, value) in Required)
         {
@@ -137,7 +145,7 @@ public class Tile
 
         foreach (var (key, value) in Output)
         {
-            Storage[key] += value;
+            Storage[key] += Math.Clamp(Storage[key] + value, 0, MaxStorage[key]);
         }
     }
 }

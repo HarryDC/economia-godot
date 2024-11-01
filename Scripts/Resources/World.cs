@@ -42,12 +42,14 @@ public partial class World : Resource
     private Layout _layout;
     public Layout Layout => _layout;
 
-    public void SetTile(Tile tile, Hex location)
+    public void AddTile(Tile.Kind type, Hex location)
     {
+        var tile = new Tile(type);
+        RootNode.AddChild(tile);
         _tiles[location.r * Height + location.q] = tile;
         var pos = _layout.HexToPixel(location);
         tile.Node.Position = pos.ToVector3();
-        RootNode.AddChild(tile.Node);
+        tile.AddChild(tile.Node);
     }
     
     public Tile  GetTile(Hex location)
