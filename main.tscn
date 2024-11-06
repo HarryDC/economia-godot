@@ -8,11 +8,13 @@
 
 [node name="Main" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 1.37157, 2.756)
 script = ExtResource("1_eiyr5")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3784, 2.75681)
 light_energy = 1.646
 omni_range = 15.157
