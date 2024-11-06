@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnqlet3p6gmam"]
+[gd_scene load_steps=6 format=3 uid="uid://dnqlet3p6gmam"]
 
+[ext_resource type="Script" path="res://Scripts/CameraControl.cs" id="1_eiyr5"]
 [ext_resource type="Script" path="res://Scripts/Board.cs" id="1_etjc3"]
 [ext_resource type="Resource" uid="uid://bgta1t6p8sws2" path="res://Resources/world.tres" id="2_1thgc"]
 [ext_resource type="PackedScene" uid="uid://taqfe4p6dcx8" path="res://cursor.tscn" id="3_n455a"]
@@ -9,6 +10,7 @@
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 1.37157, 2.756)
+script = ExtResource("1_eiyr5")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3784, 2.75681)
