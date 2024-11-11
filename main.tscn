@@ -21,6 +21,7 @@ omni_range = 15.157
 omni_attenuation = 2.0
 
 [node name="Cursor" parent="." instance=ExtResource("3_n455a")]
+KeyMove = false
 
 [node name="Board" type="Node" parent="."]
 script = ExtResource("1_etjc3")
