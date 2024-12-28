@@ -4,7 +4,6 @@ using System;
 public partial class CameraControl : Camera3D
 {
     [Export] public double RotationTime = .5; 
-
     
     private int _rotation = 0;
     private double _angleFraction = 0;

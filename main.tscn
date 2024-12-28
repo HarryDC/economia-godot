@@ -21,6 +21,7 @@ omni_range = 15.157
 omni_attenuation = 2.0
 
 [node name="Cursor" parent="." instance=ExtResource("3_n455a")]
+transform = Transform3D(0.534411, 0, 0.845225, 0, 1, 0, -0.845225, 0, 0.534411, 0, 0, 0)
 KeyMove = false
 
 [node name="Board" type="Node" parent="."]

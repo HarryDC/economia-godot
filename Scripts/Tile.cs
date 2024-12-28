@@ -124,6 +124,7 @@ public partial class Tile : Node
         _elapsed += delta;
         
         if (_elapsed < _tick) return;
+        
         _elapsed -= _tick;
         
         var canProduce = true;
@@ -145,7 +146,7 @@ public partial class Tile : Node
 
         foreach (var (key, value) in Output)
         {
-            Storage[key] += Math.Clamp(Storage[key] + value, 0, MaxStorage[key]);
+            Storage[key] = Math.Clamp(Storage[key] + value, 0, MaxStorage[key]);
         }
     }
 }
